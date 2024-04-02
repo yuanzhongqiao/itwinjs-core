@@ -1,95 +1,92 @@
-﻿# iTwin.js
-
-Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md](./LICENSE.md) for license terms and full copyright notice.
-
-[iTwin.js](http://www.itwinjs.org) is an open source platform for creating, querying, modifying, and displaying Infrastructure Digital Twins.
-
-If you have questions, or wish to contribute to iTwin.js, see our [Contributing guide](./CONTRIBUTING.md).
-
-## About this Repository
-
-[![Build status](https://dev.azure.com/imodeljs/imodeljs/_apis/build/status/iModel.js)](https://dev.azure.com/imodeljs/imodeljs/_build/latest?definitionId=12)
-
-This repository is a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that holds the source code to multiple iTwin.js npm packages. It is built using [Rush](http://rushjs.io/).
-
-See [rush.json](./rush.json) for the complete list of packages and [Versioning.md](./Versioning.md) for package and API versioning policies.
-
-Each package has its own **node_modules** directory that contains symbolic links to *common* dependencies managed by Rush.
-
-## Prerequisites
-
-- [Git](https://git-scm.com/)
-- [Node](https://nodejs.org/en/): an installation of the latest security patch of Node 20. The Node installation also includes the **npm** package manager.
-- [Rush](https://github.com/Microsoft/web-build-tools/wiki/Rush): to install `npm install -g @microsoft/rush`
-- [TypeScript](https://www.typescriptlang.org/): this is listed as a devDependency, so if you're building it from source, you will get it with `rush install`.
-- [Visual Studio Code](https://code.visualstudio.com/): an optional dependency, but the repository structure is optimized for its use
-
-> See [supported platforms](./docs/learning/SupportedPlatforms.md) for further information.
-
-## Build Instructions
-
-1. Clone repository (first time) with `git clone` or pull updates to the repository (subsequent times) with `git pull`
-2. Install dependencies: `rush install`
-3. Clean: `rush clean`
-4. Build source: `rush build`
-5. Run tests: `rush cover`
-
-The `-v` option for `rush` is short for `--verbose` which results in a more verbose command.
-
-The above commands iterate and perform their action against each package in the monorepo.
-
-If you get an error similar to the following, it means that the repo has stopped making use of an npm package that was used in the past.
-
-```
-[Error: ENOENT: no such file or directory, stat '/.../itwinjs-core/test-apps/display-test-app/node_modules/@bentley/react-scripts']
-```
-
-To fix this build error, you should completely remove the node_modules directory that is referenced in the error with `rush purge`, and then rerun `rush install`.
-
-For incremental builds, the `rush build` command can be used to only build packages that have changes versus `rush rebuild` which always rebuilds all packages.
-
-> Note: It is a good idea to `rush install` after each `git pull` as dependencies may have changed.
-
-## Source Code Edit Workflow
-
-1. Make source code changes on a new Git branch
-2. Ensure unit tests pass when run locally: `rush cover`
-3. Ensure linting passes when run locally: `rush lint`
-4. Locally commit changes: `git commit` (or use the Visual Studio Code user interface)
-5. Repeat steps 1-4 until ready to push changes
-6. Check for API signature changes: `rush extract-api`. This will update the signature files, located in `common/api`. **Note:** before doing this, first do the following:
-    - Be sure that your branch is up to date with the target branch (i.e. `git merge origin/master`)
-    - Cleanup your build output: `rush clean`
-    - Rebuild the project: `rush build`
-7. Review any diffs to the API signature files in the `common/api` directory to ensure they are compatible with the intended release of the package.
-    - If any differences are in packages not modified on this branch, revert the changes before committing.
-8. Add changelog entry (which could potentially cover several commits): `rush change`
-9. Follow prompts to enter a change description or press ENTER if the change does not warrant a changelog entry. If multiple packages have changed, multiple sets of prompts will be presented. If the changes are only to non-published packages (like **display-test-app**), then `rush change` will indicate that a changelog entry is not needed.
-10. Completing the `rush change` prompts will cause new changelog entry JSON files to be created.
-11. Add and commit the changelog JSON files and any API signature updates.
-12. Publish changes on the branch and open a pull request.
-
-If using the command line, steps 8 through 11 above can be completed in one step by running `rushchange.bat` from the imodeljs root directory.
-Only use `rushchange.bat` if none of the changes require a changelog entry.
-> Note: The CI build will break if changes are pushed without running `rush change` and `rush extract-api` (if the API was changed). The fix will be to complete steps 6 through 11.
-
-Here is a sample [changelog](https://github.com/microsoft/rushstack/blob/master/apps/rush/CHANGELOG.md) to demonstrate the level of detail expected.
-
-## Updating dependencies/devDependencies on packages within the monorepo
-
-The version numbers of internal dependencies should not be manually edited.
-These will be automatically updated by the overall *version bump* workflow.
-Note that the packages are published by CI builds only.
-
-## Updating dependencies/devDependencies on packages external to monorepo
-
-Use these instructions to update dependencies and devDependencies on external packages (ones that live outside of this monorepo).
-
-1. Edit the appropriate `package.json` file to update the semantic version range
-2. Run `rush check` to make sure that you are specifying consistent versions across the repository
-3. Run `rush update` to make sure the newer version of the module specified in #1 is installed
-
-## Other NPM Scripts
-
-1. Build TypeDoc documentation for all packages: `rush docs`
-2. Build TypeDoc documentation for a single package: `cd core\backend` and then `npm run docs`
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">DigitalTwin.js</font></font></h1><a id="user-content-itwinjs" class="anchor" aria-label="永久链接：iTwin.js" href="#itwinjs"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版权所有 © Bentley 软件公司。版权所有。请参阅</font></font><a href="/iTwin/itwinjs-core/blob/master/LICENSE.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">LICENSE.md</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">了解许可条款和完整的版权声明。</font></font></p>
+<p dir="auto"><a href="http://www.itwinjs.org" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">iTwin.js</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是一个用于创建、查询、修改和显示基础设施数字孪生的开源平台。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您有疑问或希望为 iTwin.js 做出贡献，请参阅我们的</font></font><a href="/iTwin/itwinjs-core/blob/master/CONTRIBUTING.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">贡献指南</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">关于此存储库</font></font></h2><a id="user-content-about-this-repository" class="anchor" aria-label="永久链接：关于此存储库" href="#about-this-repository"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><a href="https://dev.azure.com/imodeljs/imodeljs/_build/latest?definitionId=12" rel="nofollow"><img src="https://camo.githubusercontent.com/33e4168b7a1dea8a5d4461f164dd6790dfcfa23055a2f05fc3ab4e493cc65bb3/68747470733a2f2f6465762e617a7572652e636f6d2f696d6f64656c6a732f696d6f64656c6a732f5f617069732f6275696c642f7374617475732f694d6f64656c2e6a73" alt="构建状态" data-canonical-src="https://dev.azure.com/imodeljs/imodeljs/_apis/build/status/iModel.js" style="max-width: 100%;"></a></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该存储库是一个</font></font><a href="https://en.wikipedia.org/wiki/Monorepo" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">monorepo</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，其中包含多个 iTwin.js npm 包的源代码。它是使用</font></font><a href="http://rushjs.io/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Rush</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建的。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有关包的完整列表，</font><font style="vertical-align: inherit;">请参阅</font></font><a href="/iTwin/itwinjs-core/blob/master/rush.json"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">rush.json ；有关包和 API 版本控制策略的</font></font></a><font style="vertical-align: inherit;"></font><a href="/iTwin/itwinjs-core/blob/master/Versioning.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Versioning.md</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">每个包都有自己的</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">node_modules</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">目录，其中包含</font><font style="vertical-align: inherit;">指向 Rush 管理的</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">常见依赖项的符号链接。</font></font></em><font style="vertical-align: inherit;"></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">先决条件</font></font></h2><a id="user-content-prerequisites" class="anchor" aria-label="永久链接：先决条件" href="#prerequisites"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><a href="https://git-scm.com/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">git</font></font></a></li>
+<li><a href="https://nodejs.org/en/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Node</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：Node 20 最新安全补丁的安装。Node 安装还包括</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">npm</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">包管理器。</font></font></li>
+<li><a href="https://github.com/Microsoft/web-build-tools/wiki/Rush"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">急</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：安装</font></font><code>npm install -g @microsoft/rush</code></li>
+<li><a href="https://www.typescriptlang.org/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TypeScript</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：这被列为 devDependency，因此如果您从源代码构建它，您将通过 .TypeScript 获得它</font></font><code>rush install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></li>
+<li><a href="https://code.visualstudio.com/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Visual Studio Code</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：可选依赖项，但存储库结构针对其使用进行了优化</font></font></li>
+</ul>
+<blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请参阅</font></font><a href="/iTwin/itwinjs-core/blob/master/docs/learning/SupportedPlatforms.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支持的平台</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以获取更多信息。</font></font></p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建说明</font></font></h2><a id="user-content-build-instructions" class="anchor" aria-label="永久链接：构建说明" href="#build-instructions"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">克隆存储库（第一次）</font></font><code>git clone</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或将更新拉到存储库（后续时间）</font></font><code>git pull</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装依赖项：</font></font><code>rush install</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">干净的：</font></font><code>rush clean</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">构建源：</font></font><code>rush build</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行测试：</font></font><code>rush cover</code></li>
+</ol>
+<p dir="auto"><font style="vertical-align: inherit;"></font><code>-v</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">for 选项</font><font style="vertical-align: inherit;">是</font></font><code>rush</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">for 的缩写</font></font><code>--verbose</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，会产生更详细的命令。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">上述命令对 monorepo 中的每个包进行迭代和执行操作。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您收到类似于以下内容的错误，则意味着该存储库已停止使用过去使用过的 npm 包。</font></font></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>[Error: ENOENT: no such file or directory, stat '/.../itwinjs-core/test-apps/display-test-app/node_modules/@bentley/react-scripts']
+</code></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="[Error: ENOENT: no such file or directory, stat '/.../itwinjs-core/test-apps/display-test-app/node_modules/@bentley/react-scripts']" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要修复此构建错误，您应该完全删除错误中引用的node_modules目录</font></font><code>rush purge</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，然后重新运行</font></font><code>rush install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于增量构建，该</font></font><code>rush build</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">命令可用于仅构建发生更改的包，而不是</font></font><code>rush rebuild</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">始终重建所有包。</font></font></p>
+<blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：最好在</font></font><code>rush install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">每个之后进行，</font></font><code>git pull</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">因为依赖项可能已更改。</font></font></p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">源代码编辑工作流程</font></font></h2><a id="user-content-source-code-edit-workflow" class="anchor" aria-label="永久链接：源代码编辑工作流程" href="#source-code-edit-workflow"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在新的 Git 分支上更改源代码</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保本地运行时单元测试通过：</font></font><code>rush cover</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保本地运行时 linting 通过：</font></font><code>rush lint</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本地提交更改：（</font></font><code>git commit</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">或使用 Visual Studio Code 用户界面）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">重复步骤 1-4，直到准备好推送更改</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">检查 API 签名更改：</font></font><code>rush extract-api</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">.这将更新位于</font></font><code>common/api</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">.</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在执行此操作之前，请先执行以下操作：
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">确保您的分支与目标分支是最新的（即</font></font><code>git merge origin/master</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">清理你的构建输出：</font></font><code>rush clean</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">重建项目：</font></font><code>rush build</code></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">检查目录中 API 签名文件的任何差异，</font></font><code>common/api</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以确保它们与包的预期版本兼容。
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果此分支上未修改的包存在任何差异，请在提交之前恢复更改。</font></font></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加变更日志条目（可能涵盖多个提交）：</font></font><code>rush change</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">按照提示输入更改说明，或者如果更改不保证更改日志条目，请按 ENTER。如果多个包发生了变化，将会出现多组提示。如果更改仅针对未发布的软件包（例如</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">display-test-app</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">），则将</font></font><code>rush change</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">指示不需要更改日志条目。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">完成</font></font><code>rush change</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">提示将导致创建新的变更日志条目 JSON 文件。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加并提交变更日志 JSON 文件和任何 API 签名更新。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在分支上发布更改并打开拉取请求。</font></font></li>
+</ol>
+<p dir="auto"><font style="vertical-align: inherit;"></font><code>rushchange.bat</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果使用命令行，则可以通过从 imodeljs 根目录</font><font style="vertical-align: inherit;">运行来一步完成上述步骤 8 到 11 。仅</font></font><code>rushchange.bat</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当所有更改都不需要更改日志条目时才</font><font style="vertical-align: inherit;">使用。</font></font></p>
+<blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"></font><code>rush change</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">注意：如果在未运行的情况下</font><font style="vertical-align: inherit;">推送更改</font></font><code>rush extract-api</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（如果 API 已更改），CI 构建将会中断。修复方法是完成步骤 6 到 11。</font></font></p>
+</blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是一个示例</font></font><a href="https://github.com/microsoft/rushstack/blob/master/apps/rush/CHANGELOG.md"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">变更日志</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，用于演示预期的详细程度。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更新 monorepo 中包的依赖项/devDependency</font></font></h2><a id="user-content-updating-dependenciesdevdependencies-on-packages-within-the-monorepo" class="anchor" aria-label="永久链接：更新 monorepo 中包的依赖项/devDependency" href="#updating-dependenciesdevdependencies-on-packages-within-the-monorepo"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不应手动编辑内部依赖项的版本号。这些将由整个</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本升级</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">工作流程自动更新。请注意，这些包仅由 CI 版本发布。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">更新 monorepo 外部包的依赖关系/dev依赖关系</font></font></h2><a id="user-content-updating-dependenciesdevdependencies-on-packages-external-to-monorepo" class="anchor" aria-label="永久链接：更新 monorepo 外部包的依赖关系/dev依赖关系" href="#updating-dependenciesdevdependencies-on-packages-external-to-monorepo"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用这些说明来更新外部包（位于此 monorepo 之外的包）的依赖项和 devDependency。</font></font></p>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">编辑适当的</font></font><code>package.json</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件以更新语义版本范围</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行</font></font><code>rush check</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以确保您在存储库中指定一致的版本</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行</font></font><code>rush update</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以确保安装#1 中指定的模块的较新版本</font></font></li>
+</ol>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">其他 NPM 脚本</font></font></h2><a id="user-content-other-npm-scripts" class="anchor" aria-label="永久链接：其他 NPM 脚本" href="#other-npm-scripts"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为所有包构建 TypeDoc 文档：</font></font><code>rush docs</code></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为单个包构建 TypeDoc 文档：</font></font><code>cd core\backend</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">然后</font></font><code>npm run docs</code></li>
+</ol>
+</article></div>
